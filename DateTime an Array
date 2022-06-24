@@ -1,0 +1,39 @@
+ //la matrice di righe viene ricevuta dal file richiesto
+  string[] Righe = System.IO.File.ReadAllLines(nomeFile);
+  //inizializzo una varialbile per indicare il campo da usare nel riordiono
+  //in base al mio file
+  int indiceDaOrdinare = 8;
+   //creo un array dove inserire la lista in base alla data
+   string[] ListaFinale = new string[0];
+
+foreach (string str in RiordinoLista(Righe, indiceDaOrdinare))
+                {
+                    //metto nel nuovo arrai ogni stringa della lista appena creata
+                    Array.Resize(ref ListaFinale, ListaFinale.Length + 1);
+                    ListaFinale[ListaFinale.Length - 1] = str;
+                }
+                
+static IEnumerable<string> RiordinoLista(IEnumerable<string> arrayOriginale, int num)  
+        {  
+            // Split della stringa e sort nel giorno  
+            var OrdinePerGiorno = from stringa in arrayOriginale  
+                             let campi = stringa.Split(';')  
+                             orderby campi[num].Substring(0, 2) ascending  
+                             select stringa;         
+            // Split della stringa e sort nel mese  
+            var OrdinePerMeseGiorno = from stringa in OrdinePerGiorno
+                               let campi = stringa.Split(';')
+                               orderby campi[num].Substring(3, 2) ascending
+                               select stringa; 
+            // Split della stringa e sort nel anno  
+            var OrdinePerAnnoMeseGiorno = from stringa in OrdinePerMeseGiorno
+                               let campi = stringa.Split(';')
+                               orderby campi[num].Substring(6, 4) ascending
+                               select stringa;
+            return OrdinePerAnnoMeseGiorno;
+        }
+        
+        for(int j = 0; j < ListaFinale.Length; j++)
+        {
+            Console.WriteLine(ListaFinale[j]);
+        }
